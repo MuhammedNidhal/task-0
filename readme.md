@@ -1,6 +1,6 @@
 # Task 0 Solution
 #### This is a simple task to showcase the skills and ability of the career accelerator course
-*Installations*
+*Installations:*
 ```
 asgiref==3.6.0
 Django==4.1.4
