@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
         ('t0', '0001_initial'),
     ]
 
-    operations = [
+    operations = [ #renaming the table for display purposes
         migrations.RenameModel(
             old_name='Posts',
             new_name='Post',

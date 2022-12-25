@@ -3,18 +3,18 @@
 from django.db import migrations, models
 import uuid
 
-
+# migration class that creates the database table
 class Migration(migrations.Migration):
 
     initial = True
 
     dependencies = [
     ]
-
+    # the operation performed by the class to create a database model
     operations = [
         migrations.CreateModel(
-            name='Posts',
-            fields=[
+            name='Posts', # table name
+            fields=[ # table columns
                 ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
                 ('title', models.CharField(max_length=255, verbose_name='title')),
                 ('text', models.TextField(blank=True, null=True, verbose_name='text')),

@@ -1,32 +1,31 @@
-"""task0 URL Configuration
+from typing import List # this is used to display the list of posts
+from django.contrib import admin # for admin panel
+from django.urls import path # for paths and api urls
+from ninja import NinjaAPI # for API endpoint creation and testing
+from t0.schemas import * # importing output and input schemas
+from t0.models import * # for requests on the database models
+from ninja.security import APIKeyHeader # for security and API keys
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from typing import List
-from django.contrib import admin
-from django.urls import path
-from ninja import NinjaAPI
+# Simple Authentication using  a header api key
+class ApiKey(APIKeyHeader):
+    param_name = "X-API-Key"
 
-from t0.schemas import *
-from t0.models import *
+    def authenticate(self, request, key):
+        if key == "Muhammed":
+            return key
 
-api = NinjaAPI()
 
+header_key = ApiKey()
+
+api = NinjaAPI(auth=header_key) # naming the ninja API "api" and giving all endpoints the auth method
+
+#getting all posts endpoint
 @api.get("/posts", response=List[PostsOut])
 def get(request):
     posts = Post.objects.all()
     return posts
+
+#creating a new post
 @api.post("/posts",response= MessageOut)
 def post(request, post_in: PostsIn):
     Post.objects.create(
@@ -35,7 +34,8 @@ def post(request, post_in: PostsIn):
         text = post_in.text,
     )
     return {"message": "Post Created!"}
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/", api.urls)
+    path("api/", api.urls) #telling the program to register our API urls
 ]
